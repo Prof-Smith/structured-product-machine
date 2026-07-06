@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Structured Product Machine</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1>Structured Product Machine</h1>
+      <p>Buffered Step-Up Note | 20% Buffer | 150% Upside Participation</p>
+    </div>
+    <div class="tag">Financial MRI</div>
+  </header>
+
+  <main class="dashboard">
+    <section class="panel controls-panel">
+      <h2>1. Choose the market outcome</h2>
+      <p class="muted">Use a preset or drag the slider. The product story updates immediately.</p>
+
+      <div class="button-grid">
+        <button id="bearBtn" class="btn red">Bear<br><span>-35%</span></button>
+        <button id="mildBtn" class="btn orange">Mild Loss<br><span>-12%</span></button>
+        <button id="baseBtn" class="btn green active">Base<br><span>+8%</span></button>
+        <button id="bullBtn" class="btn green">Bull<br><span>+40%</span></button>
+      </div>
+
+      <div class="slider-card">
+        <label for="returnSlider">Underlying Return</label>
+        <div class="slider-row">
+          <span>-50%</span>
+          <input id="returnSlider" type="range" min="-50" max="50" value="8" />
+          <span>+50%</span>
+        </div>
+        <div class="current-return"><span id="returnLabel">+8%</span></div>
+      </div>
+
+      <div class="metric green-border">
+        <span>Investor receives</span>
+        <strong id="noteValue">$1,120</strong>
+        <p id="resultExplanation">Upside participation is active.</p>
+      </div>
+    </section>
+
+    <section class="panel visual-panel">
+      <div class="panel-heading">
+        <div>
+          <h2>2. Follow the transformation</h2>
+          <p class="muted">The note takes a market return, passes it through its layers, and produces an investor payoff.</p>
+        </div>
+        <div class="mode-buttons">
+          <button id="assembleBtn" class="btn blue active">Flow View</button>
+          <button id="explodeBtn" class="btn orange">Component View</button>
+          <button id="feesBtn" class="btn gray">Reveal Fees</button>
+        </div>
+      </div>
+
+      <div id="machineStage" class="teaching-stage flow-view">
+        <div class="flow-card input-card">
+          <div class="card-label">Market return</div>
+          <div id="marketBadge" class="big-number positive">+8%</div>
+          <p id="marketStory">Positive return enters the option engine.</p>
+        </div>
+
+        <div class="flow-arrow">→</div>
+
+        <div class="layer-stack">
+          <button class="component option active" data-layer="option">
+            <span class="color-bar green-bar"></span>
+            <div>
+              <strong>Upside Option Engine</strong>
+              <small>Positive returns are multiplied by 150%.</small>
+            </div>
+            <b id="optionStatus">Active</b>
+          </button>
+
+          <button class="component buffer" data-layer="buffer">
+            <span class="color-bar orange-bar"></span>
+            <div>
+              <strong>20% Buffer Shield</strong>
+              <small>Losses from 0% to -20% are absorbed.</small>
+            </div>
+            <b id="bufferStatus">Unused</b>
+          </button>
+
+          <button class="component bond" data-layer="bond">
+            <span class="color-bar blue-bar"></span>
+            <div>
+              <strong>Bond Core</strong>
+              <small>Foundation supporting repayment at maturity.</small>
+            </div>
+            <b>Foundation</b>
+          </button>
+
+          <button id="feeLayer" class="component fees hidden" data-layer="fees">
+            <span class="color-bar gray-bar"></span>
+            <div>
+              <strong>Issuer Spread</strong>
+              <small>Embedded structuring economics and compensation.</small>
+            </div>
+            <b>Hidden</b>
+          </button>
+        </div>
+
+        <div class="flow-arrow">→</div>
+
+        <div class="flow-card output-card">
+          <div class="card-label">Investor payoff</div>
+          <div id="payoffBadge" class="big-number positive">$1,120</div>
+          <div id="payoffRule" class="rule-box">+8% × 150% = +12%</div>
+          <p id="payoffStory">The option engine amplifies the positive market return.</p>
+        </div>
+      </div>
+
+      <div class="layer-description" id="layerDescription">
+        <h3>Green Upside Option Engine</h3>
+        <p>When the underlying return is positive, the note pays 150% of that gain. A +8% market return becomes a +12% note return.</p>
+      </div>
+
+      <div class="legend-row">
+        <button class="legend-item" data-layer="option"><span class="dot green-dot"></span>Option Engine</button>
+        <button class="legend-item" data-layer="buffer"><span class="dot orange-dot"></span>Buffer Shield</button>
+        <button class="legend-item" data-layer="bond"><span class="dot blue-dot"></span>Bond Core</button>
+        <button class="legend-item" data-layer="fees"><span class="dot gray-dot"></span>Issuer Spread</button>
+      </div>
+    </section>
+
+    <section class="panel risk-panel">
+      <h2>3. Connect to the payoff diagram</h2>
+      <p class="muted">The dot shows the same scenario in traditional payoff form.</p>
+
+      <canvas id="payoffCanvas" width="420" height="280"></canvas>
+
+      <div class="context-card green-border">
+        <span>Current scenario</span>
+        <strong id="scenarioText">Market +8% → Note +12%</strong>
+      </div>
+      <div class="context-card orange-border">
+        <span>Buffer rule</span>
+        <strong>No loss until market &lt; -20%</strong>
+      </div>
+      <div class="context-card red-border">
+        <span>Breach example</span>
+        <strong>Market -30% → Note -10%</strong>
+      </div>
+
+      <div class="decision-card">
+        <span>Behavioral Finance Mode</span>
+        <strong>Would you buy this note?</strong>
+        <div class="vote-row">
+          <button id="yesBtn">Yes</button>
+          <button id="noBtn">No</button>
+        </div>
+        <p id="voteReveal" class="muted small">Commit first. Then inspect buffer breach risk and embedded fees.</p>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/payoff.js"></script>
+  <script src="js/chart.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
