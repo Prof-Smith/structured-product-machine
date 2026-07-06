@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Structured Product Machine</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="hero">
+    <div>
+      <p class="eyebrow">Interactive Finance Illustration</p>
+      <h1>Structured Product Machine</h1>
+      <p class="subtitle">Buffered Step-Up Note: <strong>20% Buffer</strong> + <strong>150% Upside Participation</strong></p>
+    </div>
+    <div class="formula-card">
+      <span>Core idea</span>
+      <strong>Bond + Buffer + Option Engine − Fees</strong>
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside class="panel control-panel">
+      <h2>1. Choose a scenario</h2>
+      <p class="help">Start with presets, then drag the market return slider.</p>
+      <div class="scenario-grid">
+        <button class="scenario red" data-return="-35">Bear<br><span>-35%</span></button>
+        <button class="scenario orange" data-return="-12">Mild Loss<br><span>-12%</span></button>
+        <button class="scenario green active" data-return="8">Base<br><span>+8%</span></button>
+        <button class="scenario bright" data-return="40">Bull<br><span>+40%</span></button>
+      </div>
+
+      <section class="slider-box">
+        <div class="label-row"><span>Underlying Return</span><strong id="returnLabel">+8%</strong></div>
+        <input id="returnSlider" type="range" min="-50" max="50" value="8" />
+        <div class="scale"><span>-50%</span><span>-20%</span><span>0%</span><span>+50%</span></div>
+      </section>
+
+      <section class="result-card" id="resultCard">
+        <span>Investor receives</span>
+        <strong id="noteValue">$1,120</strong>
+        <p id="resultExplanation">Upside participation is active.</p>
+      </section>
+    </aside>
+
+    <section class="panel main-panel">
+      <div class="section-heading">
+        <div>
+          <h2>2. Read the machine from inside out</h2>
+          <p class="help">Each layer has one job. Click a layer or use the buttons below.</p>
+        </div>
+        <div class="mode-buttons">
+          <button id="assembledBtn" class="mode active">Assembled</button>
+          <button id="explodedBtn" class="mode">Exploded</button>
+          <button id="feesBtn" class="mode">Reveal Fees</button>
+        </div>
+      </div>
+
+      <div class="visual-wrap">
+        <svg id="machineSvg" viewBox="0 0 980 520" role="img" aria-label="Structured product machine diagram">
+          <defs>
+            <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="8" result="blur" />
+              <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            </filter>
+            <linearGradient id="bondGrad" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0" stop-color="#60a5fa"/><stop offset="1" stop-color="#1d4ed8"/>
+            </linearGradient>
+          </defs>
+
+          <g id="shockGroup" class="clickable" data-layer="shock">
+            <text x="80" y="120" class="small-label red-text">market shock</text>
+            <path class="shock-arrow" d="M85 160 L260 210"/>
+            <path class="shock-arrow" d="M85 220 L260 240"/>
+            <path class="shock-arrow" d="M85 280 L260 270"/>
+          </g>
+
+          <g id="bufferGroup" class="clickable layer-buffer" data-layer="buffer">
+            <rect x="285" y="118" width="410" height="284" rx="142" class="buffer-shell" />
+            <text x="490" y="96" text-anchor="middle" class="layer-title buffer-text">20% BUFFER SHIELD</text>
+            <text x="490" y="420" text-anchor="middle" class="small-label buffer-text">absorbs losses from 0% to -20%</text>
+          </g>
+
+          <g id="bondGroup" class="clickable layer-bond" data-layer="bond">
+            <rect x="422" y="170" width="136" height="180" rx="18" class="bond-core" />
+            <ellipse cx="490" cy="170" rx="68" ry="18" class="bond-top" />
+            <ellipse cx="490" cy="350" rx="68" ry="18" class="bond-bottom" />
+            <text x="490" y="250" text-anchor="middle" class="bond-label">Bond</text>
+            <text x="490" y="282" text-anchor="middle" class="bond-label">Core</text>
+          </g>
+
+          <g id="optionGroup" class="clickable layer-option" data-layer="option">
+            <path class="option-ring" d="M292 260 C390 170, 590 170, 688 260 C590 350, 390 350, 292 260 Z" />
+            <path class="option-ring thin" d="M330 260 C415 205, 565 205, 650 260 C565 315, 415 315, 330 260 Z" />
+            <path class="upside-line" d="M705 260 L875 175" />
+            <path class="upside-head" d="M875 175 L850 175 L866 196 Z" />
+            <text x="835" y="152" text-anchor="middle" class="small-label option-text">150% upside</text>
+            <text x="835" y="174" text-anchor="middle" class="small-label option-text">accelerator</text>
+          </g>
+
+          <g id="feeGroup" class="clickable layer-fees is-hidden" data-layer="fees">
+            <rect x="258" y="92" width="464" height="336" rx="168" class="fee-shell" />
+            <text x="490" y="454" text-anchor="middle" class="small-label fee-text">issuer spread / embedded economics</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="layer-reader" id="layerReader">
+        <div class="color-chip bond"></div>
+        <div>
+          <h3>Blue Bond Core</h3>
+          <p>The bond component supports principal repayment at maturity. This is the product’s foundation.</p>
+        </div>
+      </div>
+
+      <div class="legend-row">
+        <button class="legend-item" data-layer="bond"><span class="swatch bond"></span> Bond Core</button>
+        <button class="legend-item" data-layer="buffer"><span class="swatch buffer"></span> Buffer Shield</button>
+        <button class="legend-item" data-layer="option"><span class="swatch option"></span> Option Engine</button>
+        <button class="legend-item" data-layer="fees"><span class="swatch fees"></span> Issuer Spread</button>
+      </div>
+    </section>
+
+    <aside class="panel risk-panel">
+      <h2>3. Connect to payoff</h2>
+      <p class="help">The dot moves with the selected market outcome.</p>
+      <canvas id="payoffCanvas" width="430" height="300"></canvas>
+
+      <div class="kpi green-border"><span>Current scenario</span><strong id="scenarioText">Market +8% → Note +12%</strong></div>
+      <div class="kpi orange-border"><span>Buffer rule</span><strong>No loss until market falls below -20%</strong></div>
+      <div class="kpi red-border"><span>Breach example</span><strong>Market -30% → Note -10%</strong></div>
+
+      <div class="decision-box">
+        <span>Behavioral prompt</span>
+        <strong>Would you buy this note?</strong>
+        <div class="vote-row"><button id="yesBtn">Yes</button><button id="noBtn">No</button></div>
+        <p id="voteText">Commit first, then inspect fees and downside breach risk.</p>
+      </div>
+    </aside>
+  </main>
+
+  <script src="js/payoff.js"></script>
+  <script src="js/chart.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
