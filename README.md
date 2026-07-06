@@ -9,7 +9,7 @@ It keeps the working static GitHub Pages architecture and restores reliable butt
 ## Upload
 Upload these files directly to the repository root:
 
-```text
+'''text
 index.html
 README.md
 css/styles.css
